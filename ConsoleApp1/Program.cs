@@ -9,37 +9,42 @@ namespace ConsoleApp1
         static Tuple<string, string> names;
         static ConsolePrinter printer = new ConsolePrinter();
         static readonly string INSTRUCTION_MESSAGE = "Press ? to get instructions.";
-        static readonly string GET_CATEGORIES_MESSAGE = "Press c to get categories";
-        static readonly string GET_RANDOM_JOKES_MESSAGE = "Press r to get random jokes";
+        static readonly string CATEGORIES_MESSAGE = "Press c to get categories";
+        static readonly string RANDOM_JOKES_MESSAGE = "Press r to get random jokes";
         static readonly string RANDOM_NAME_MESSAGE = "\nWant to use a random name? y/n";
         static readonly string SPECIFY_CATEGORY_MESSAGE = "\nWant to specify a category? y/n";
         static readonly string AMOUNT_OF_JOKES_MESSAGE = "\nHow many jokes do you want? (1-9)";
         static readonly string ENTER_CATEGORY_MESSAGE = "Enter a category;";
         static readonly string QUIT_INSTRUCTION = "Press q to quit program";
         static readonly string PROGRAM_DONE_MESSAGE = "\nProgram shutdown";
+        static readonly string INSTRUCTIONS = "?";
+        static readonly char QUIT = 'q';
+        static readonly char CATEGORIES = 'c';
+        static readonly char RANDOM_JOKES = 'r';
+        static readonly char YES = 'y';
 
         static void Main(string[] args)
         {
             printer.Value(INSTRUCTION_MESSAGE).ToString();
             new JsonFeed();
-            if (Console.ReadLine() == "?")
+            if (Console.ReadLine() == INSTRUCTIONS)
             {
-                while (key != 'q')
+                while (key != QUIT)
                 {
-                    printer.Value(GET_CATEGORIES_MESSAGE).ToString();
-                    printer.Value(GET_RANDOM_JOKES_MESSAGE).ToString();
+                    printer.Value(CATEGORIES_MESSAGE).ToString();
+                    printer.Value(RANDOM_JOKES_MESSAGE).ToString();
                     printer.Value(QUIT_INSTRUCTION).ToString();
                     GetEnteredKey(Console.ReadKey());
-                    if (key == 'c')
+                    if (key == CATEGORIES)
                     {
                         getCategories();
                         PrintResults();
                     }
-                    if (key == 'r')
+                    if (key == RANDOM_JOKES)
                     {
                         printer.Value(RANDOM_NAME_MESSAGE).ToString();
                         GetEnteredKey(Console.ReadKey());
-                        if (key == 'y')
+                        if (key == YES)
                             GetNames();
                         printer.Value(SPECIFY_CATEGORY_MESSAGE).ToString();
                         GetEnteredKey(Console.ReadKey());
@@ -56,7 +61,7 @@ namespace ConsoleApp1
             printer.Value(AMOUNT_OF_JOKES_MESSAGE).ToString();
             int numberOfJokes = Int32.Parse(Console.ReadLine());
             string category = null;
-            if (key == 'y')
+            if (key == YES)
             {
                 printer.Value(ENTER_CATEGORY_MESSAGE).ToString();
                 category = Console.ReadLine();
