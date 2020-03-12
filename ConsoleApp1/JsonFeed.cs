@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
@@ -10,20 +7,21 @@ namespace ConsoleApp1
 {
     class JsonFeed
     {
-        static string _url = "";
-
+      
+        static readonly string RANDOM_JOKES_URL = "jokes/random";
+        static readonly string CATEGORIES_JOKES_URL = "jokes/categories";
+        static readonly string CHUCK_NORRIS = "Chuck Norris";
+        static readonly string CHUCK_NORRIS_API = "https://api.chucknorris.io";
+        static readonly string NAME_API = "http://uinames.com/api/";
         public JsonFeed() { }
-        public JsonFeed(string endpoint, int results)
-        {
-            _url = endpoint;
-        }
-        
+  
 		public static string[] GetRandomJokes(string firstname, string lastname, string category)
 		{
 			HttpClient client = new HttpClient();
-			client.BaseAddress = new Uri(_url);
-			string url = "jokes/random";
-			if (category != null)
+			client.BaseAddress = new Uri(CHUCK_NORRIS_API);
+            string url = RANDOM_JOKES_URL;
+
+            if (category != null)
 			{
 				if (url.Contains('?'))
 					url += "&";
@@ -36,15 +34,13 @@ namespace ConsoleApp1
 
             if (firstname != null && lastname != null)
             {
-                int index = joke.IndexOf("Chuck Norris");
+                int index = joke.IndexOf(CHUCK_NORRIS_API);
                 string firstPart = joke.Substring(0, index);
-                string secondPart = joke.Substring(0 + index + "Chuck Norris".Length, joke.Length - (index + "Chuck Norris".Length));
+                string secondPart = joke.Substring(0 + index + CHUCK_NORRIS.Length, joke.Length - (index + CHUCK_NORRIS.Length));
                 joke = firstPart + " " + firstname + " " + lastname + secondPart;
             }
-
             return new string[] { JsonConvert.DeserializeObject<dynamic>(joke).value };
         }
-
         /// <summary>
         /// returns an object that contains name and surname
         /// </summary>
@@ -53,17 +49,14 @@ namespace ConsoleApp1
 		public static dynamic Getnames()
 		{
 			HttpClient client = new HttpClient();
-			client.BaseAddress = new Uri(_url);
-			var result = client.GetStringAsync("").Result;
-			return JsonConvert.DeserializeObject<dynamic>(result);
-		}
-
+			client.BaseAddress = new Uri(NAME_API);
+            return JsonConvert.DeserializeObject<dynamic>(client.GetStringAsync("").Result);
+        }
 		public static string[] GetCategories()
 		{
-			HttpClient client = new HttpClient();
-			client.BaseAddress = new Uri(_url);
-
-			return new string[] { Task.FromResult(client.GetStringAsync("categories").Result).Result };
+            HttpClient client = new HttpClient();
+			client.BaseAddress = new Uri(CHUCK_NORRIS_API);
+			return new string[] { Task.FromResult(client.GetStringAsync(CATEGORIES_JOKES_URL).Result).Result };
 		}
     }
 }
